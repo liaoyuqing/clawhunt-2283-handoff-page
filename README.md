@@ -128,4 +128,23 @@ npm run verify
 
 ## 证据
 
-`docs/screenshots/` 下 11 张模拟器实拍截图对应各条验收点（文件名前缀即验收点编号），`docs/checks/` 下是类型检查与单元测试的原始日志。
+`docs/checks/` 是逐条命令的原始日志：`typecheck.log`（空文件即通过）、`unit-tests.log`（37 个用例逐行）、`verify.log`（一条命令跑完三步）。
+
+`docs/screenshots/` 是微信开发者工具模拟器实拍截图，文件名前缀即验收点编号：
+
+| 文件 | 对应验收点 | 画面内容 |
+| --- | --- | --- |
+| `ac1-9chars-disabled.jpg` | AC1 | 描述 9 字，红字提示「请至少填写 10 个字，便于我们准确理解您的问题」，计数 9/500，提交按钮置灰且下方同文案 |
+| `ac1-10chars-enabled.jpg` | AC1 | 描述 10 字，提示消失，计数 10/500，提交按钮可点 |
+| `ac2-source-faq.jpg` | AC2 | 从 FAQ 进入，卡片内显示「来自：常见问题」 |
+| `ac2-source-butler.jpg` | AC2 | 从礼宾对话进入，显示「来自：礼宾对话」 |
+| `ac3-step-queued.jpg` | AC3 | 排队中：仅第 1 段高亮，后 3 段未到达 |
+| `ac3-step-in-progress.jpg` | AC3 | 处理中：第 1 段已完成打勾，第 2 段高亮，后 2 段未到达 |
+| `ac3-step-replied.jpg` | AC3 | 已回复：前 3 段完成，第 3 段高亮，第 4 段未到达 |
+| `ac3-step-closed.jpg` | AC3 | 已关闭：4 段全部完成，第 4 段高亮 |
+| `ac4-open-input-present.jpg` | AC4 | 已回复态底部保留「补充说明您的问题 + 发送」输入栏 |
+| `ac4-closed-no-input.jpg` | AC4 | 已关闭态输入栏消失，改为「本次服务已结束，如有新问题请重新提交」 |
+| `ac5-work-hours-tip.jpg` | AC5 | 工作时间内：蓝底「服务时间 9:00–18:00（法定节假日顺延），提交后将按顺序处理」 |
+| `ac5-off-hours-tip.jpg` | AC5 | 非工作时间：橙底「当前为非服务时间，提交后将于次日 9:00 起依次处理」 |
+
+截图由微信开发者工具模拟器（iPhone 尺寸 428×926）实拍，未经任何后期处理。
