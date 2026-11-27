@@ -1,0 +1,12 @@
+{
+  "pages": ["pages/support/handoff", "pages/support/handoff-detail"],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTitleText": "我的咨询",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f5f6f7"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

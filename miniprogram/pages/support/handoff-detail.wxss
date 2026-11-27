@@ -1,0 +1,147 @@
+.head-card {
+  background: #ffffff;
+  border-radius: 20rpx;
+  padding: 24rpx;
+  margin-bottom: 24rpx;
+}
+
+.head-card__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.head-card__cat {
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.head-card__status {
+  font-size: 24rpx;
+  color: #0052d9;
+  background: #e8f3ff;
+  border-radius: 12rpx;
+  padding: 6rpx 16rpx;
+}
+
+.head-card__source {
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: #8b8f96;
+}
+
+.steps {
+  display: flex;
+  background: #ffffff;
+  border-radius: 20rpx;
+  padding: 28rpx 12rpx;
+  margin-bottom: 24rpx;
+}
+
+.step {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.step__dot {
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  border: 2rpx solid #d9dde3;
+  color: #9aa0a6;
+  background: #ffffff;
+  z-index: 2;
+}
+
+.step__label {
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: #9aa0a6;
+}
+
+.step__line {
+  position: absolute;
+  top: 22rpx;
+  left: 50%;
+  width: 100%;
+  height: 2rpx;
+  background: #e6e8eb;
+  z-index: 1;
+}
+
+.step--done .step__dot {
+  background: #0052d9;
+  border-color: #0052d9;
+  color: #ffffff;
+}
+
+.step--done .step__label {
+  color: #0052d9;
+}
+
+.step--done .step__line {
+  background: #0052d9;
+}
+
+.step--current .step__dot {
+  background: #0052d9;
+  border-color: #0052d9;
+  color: #ffffff;
+  box-shadow: 0 0 0 6rpx rgba(0, 82, 217, 0.16);
+}
+
+.step--current .step__label {
+  color: #0052d9;
+  font-weight: 600;
+}
+
+.step--todo .step__dot {
+  background: #ffffff;
+  border-color: #d9dde3;
+  color: #9aa0a6;
+}
+
+.bubbles {
+  background: #ffffff;
+  border-radius: 20rpx;
+  padding: 28rpx 24rpx 8rpx;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  background: #ffffff;
+  border-radius: 20rpx;
+  padding: 20rpx 24rpx;
+  margin-top: 24rpx;
+}
+
+.footer__input {
+  flex: 1;
+}
+
+.closed-tip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  background: #f1f2f4;
+  border-radius: 20rpx;
+  padding: 28rpx 24rpx;
+  margin-top: 24rpx;
+  color: #8b8f96;
+  font-size: 26rpx;
+}
+
+.closed-tip__text {
+  color: #5c6068;
+}
+

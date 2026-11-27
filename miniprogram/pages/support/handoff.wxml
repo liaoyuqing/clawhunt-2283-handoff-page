@@ -1,0 +1,90 @@
+<view class="page-body">
+  <view class="work-tip {{inWorkHours ? 'work-tip--on' : 'work-tip--off'}}" id="work-tip">
+    <t-icon name="time" size="28rpx" color="#0052d9" />
+    <text class="work-tip__text">{{workTip}}</text>
+  </view>
+
+  <view class="source-tag" wx:if="{{showSource}}" id="source-tag">
+    <t-tag theme="primary" variant="light" size="medium">{{sourceLabel}}</t-tag>
+  </view>
+
+  <view class="card" id="my-tickets">
+    <view class="card__head" bindtap="toggleList">
+      <view class="card__title">我的咨询</view>
+      <view class="card__badge" wx:if="{{unclosedCount > 0}}">{{unclosedCount}}</view>
+      <view class="card__action">{{showList ? '收起' : '展开'}}</view>
+    </view>
+    <view class="ticket-list" wx:if="{{showList}}">
+      <block wx:for="{{groups}}" wx:key="status">
+        <view class="ticket-group">
+          <view class="ticket-group__title">{{item.label}}（{{item.items.length}}）</view>
+          <view
+            class="ticket-item"
+            wx:for="{{item.items}}"
+            wx:for-item="ticket"
+            wx:key="id"
+            data-id="{{ticket.id}}"
+            bindtap="openDetail"
+          >
+            <view class="ticket-item__desc">{{ticket.description}}</view>
+            <view class="ticket-item__meta">{{ticket.id}} · {{ticket.statusLabel}}</view>
+          </view>
+        </view>
+      </block>
+      <view class="ticket-empty" wx:if="{{groups.length === 0}}">暂无咨询记录</view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card__title card__title--block">问题分类</view>
+    <t-radio-group value="{{category}}" bind:change="onCategoryChange" class="category-group">
+      <view class="category-grid">
+        <view class="category-cell" wx:for="{{categories}}" wx:key="key">
+          <t-radio value="{{item.key}}" label="{{item.label}}" allow-uncheck="false" />
+        </view>
+      </view>
+    </t-radio-group>
+  </view>
+
+  <view class="card">
+    <view class="card__title card__title--block">问题描述</view>
+    <t-textarea
+      id="description-input"
+      class="desc-area"
+      value="{{description}}"
+      placeholder="请描述您遇到的问题，10–500 字"
+      maxlength="500"
+      autosize
+      bind:change="onDescriptionInput"
+    />
+    <view class="desc-tip desc-tip--error" wx:if="{{tipVisible}}" id="desc-tip">{{descTip}}</view>
+    <view class="desc-count">{{descLength}}/500</view>
+  </view>
+
+  <view class="card">
+    <view class="card__title card__title--block">截图（最多 {{attachmentMax}} 张）</view>
+    <view class="attach-list">
+      <view class="attach-item" wx:for="{{attachments}}" wx:key="path">
+        <image class="attach-item__img" src="{{item.path}}" mode="aspectFill" />
+        <view class="attach-item__remove" data-index="{{index}}" bindtap="onRemoveAttachment">×</view>
+      </view>
+      <view class="attach-add" wx:if="{{attachments.length < attachmentMax}}" bindtap="onChooseMedia">
+        <t-icon name="add" size="40rpx" color="#8b8f96" />
+      </view>
+    </view>
+    <view class="desc-tip desc-tip--error" wx:if="{{attachmentTipVisible}}" id="attach-tip">{{attachmentTip}}</view>
+  </view>
+
+  <view class="submit-bar">
+    <t-button
+      id="submit-btn"
+      theme="primary"
+      size="large"
+      block
+      disabled="{{!submitEnabled || submitting}}"
+      loading="{{submitting}}"
+      bind:tap="onSubmit"
+    >提交问题</t-button>
+    <view class="submit-reason" wx:if="{{!submitEnabled}}" id="submit-reason">{{submitReason}}</view>
+  </view>
+</view>

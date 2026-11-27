@@ -1,0 +1,31 @@
+﻿
+> clawhunt-2283-handoff-page@1.0.0 verify
+> npm run build:npm && npm run typecheck && npm run test
+
+
+> clawhunt-2283-handoff-page@1.0.0 build:npm
+> node scripts/build-npm.mjs
+
+[build-npm] tdesign-miniprogram@1.18.0 → miniprogram/miniprogram_npm/tdesign-miniprogram
+[build-npm] 产物文件数 1191，总字节 1533408
+
+> clawhunt-2283-handoff-page@1.0.0 typecheck
+> tsc --noEmit
+
+
+> clawhunt-2283-handoff-page@1.0.0 test
+> vitest run
+
+
+ RUN  v5.1.2 E:/AI接单/Clawhunt/delivery/work/2283/repo
+
+ ✓ tests/status.spec.ts (13 tests) 8ms
+ ✓ tests/repository.spec.ts (10 tests) 8ms
+ ✓ tests/validation.spec.ts (8 tests) 5ms
+ ✓ tests/source.spec.ts (6 tests) 4ms
+
+ Test Files  4 passed (4)
+      Tests  37 passed (37)
+   Start at  13:23:57
+   Duration  506ms (import 41%, transform 22%, tests 21%, worker 15%, environment 1%)
+

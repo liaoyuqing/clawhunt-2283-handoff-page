@@ -1,0 +1,53 @@
+<view class="page-body" wx:if="{{loaded}}">
+  <view class="head-card">
+    <view class="head-card__row">
+      <view class="head-card__cat">{{categoryText}}</view>
+      <view class="head-card__status">{{statusLabel}}</view>
+    </view>
+    <view class="head-card__source" wx:if="{{showSource}}" id="detail-source">来自：{{sourceText}}</view>
+  </view>
+
+  <view class="steps" id="status-steps">
+    <view
+      class="step step--{{item.visual}}"
+      wx:for="{{steps}}"
+      wx:key="status"
+      id="step-{{item.status}}"
+    >
+      <view class="step__dot">
+        <t-icon wx:if="{{item.visual === 'done'}}" name="check" size="24rpx" color="#ffffff" />
+        <text wx:else>{{index + 1}}</text>
+      </view>
+      <view class="step__label">{{item.label}}</view>
+      <view class="step__line" wx:if="{{index < steps.length - 1}}"></view>
+    </view>
+  </view>
+
+  <view class="bubbles" id="bubble-list">
+    <message-bubble
+      wx:for="{{bubbles}}"
+      wx:key="id"
+      side="{{item.side}}"
+      text="{{item.text}}"
+      time="{{item.time}}"
+      name="礼宾团队"
+    />
+  </view>
+
+  <view class="footer" wx:if="{{showInput}}" id="reply-bar">
+    <t-input
+      id="reply-input"
+      class="footer__input"
+      value="{{draft}}"
+      placeholder="补充说明您的问题"
+      maxlength="500"
+      bind:change="onDraftInput"
+    />
+    <t-button id="send-btn" theme="primary" size="medium" loading="{{sending}}" bind:tap="onSend">发送</t-button>
+  </view>
+
+  <view class="closed-tip" wx:if="{{showClosedTip}}" id="closed-tip">
+    <t-icon name="info-circle" size="32rpx" color="#8b8f96" />
+    <text class="closed-tip__text">{{closedTip}}</text>
+  </view>
+</view>

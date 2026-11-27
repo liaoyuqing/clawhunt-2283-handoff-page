@@ -1,0 +1,4 @@
+{
+  "desc": "演示工程不对搜索引擎开放",
+  "rules": [{ "action": "disallow", "page": "*" }]
+}

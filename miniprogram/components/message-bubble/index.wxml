@@ -1,0 +1,10 @@
+<view class="bubble-row {{side === 'member' ? 'bubble-row--right' : 'bubble-row--left'}}">
+  <view class="bubble-col">
+    <view class="bubble-name" wx:if="{{side !== 'member'}}">{{name}}</view>
+    <view class="bubble {{side === 'member' ? 'bubble--member' : 'bubble--butler'}}">
+      <text class="bubble-text">{{text}}</text>
+    </view>
+    <view class="bubble-time">{{timeText}}</view>
+  </view>
+</view>
+

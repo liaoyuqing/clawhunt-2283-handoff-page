@@ -1,0 +1,65 @@
+.bubble-row {
+  display: flex;
+  width: 100%;
+  margin-bottom: 28rpx;
+}
+
+.bubble-row--right {
+  justify-content: flex-end;
+}
+
+.bubble-row--left {
+  justify-content: flex-start;
+}
+
+.bubble-col {
+  display: flex;
+  flex-direction: column;
+  max-width: 78%;
+}
+
+.bubble-row--right .bubble-col {
+  align-items: flex-end;
+}
+
+.bubble-row--left .bubble-col {
+  align-items: flex-start;
+}
+
+.bubble-name {
+  font-size: 24rpx;
+  color: #8b8f96;
+  margin-bottom: 8rpx;
+}
+
+.bubble {
+  padding: 20rpx 24rpx;
+  border-radius: 20rpx;
+  font-size: 28rpx;
+  line-height: 1.55;
+  word-break: break-word;
+}
+
+.bubble--member {
+  background: #0052d9;
+  color: #ffffff;
+  border-top-right-radius: 6rpx;
+}
+
+.bubble--butler {
+  background: #ffffff;
+  color: #1f2329;
+  border-top-left-radius: 6rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.06);
+}
+
+.bubble-text {
+  white-space: pre-wrap;
+}
+
+.bubble-time {
+  font-size: 22rpx;
+  color: #9aa0a6;
+  margin-top: 8rpx;
+}
+
