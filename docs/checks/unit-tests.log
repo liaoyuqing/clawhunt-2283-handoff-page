@@ -1,7 +1,7 @@
-﻿
+
  RUN  v5.1.2 E:/AI接单/Clawhunt/delivery/work/2283/repo
 
- ✓ tests/status.spec.ts > AC3 4 种状态的步骤条 > 四段齐全且顺序固定为 排队中 → 处理中 → 已回复 → 已关闭 3ms
+ ✓ tests/status.spec.ts > AC3 4 种状态的步骤条 > 四段齐全且顺序固定为 排队中 → 处理中 → 已回复 → 已关闭 2ms
  ✓ tests/status.spec.ts > AC3 4 种状态的步骤条 > 每种状态都恰好只有一段高亮 0ms
  ✓ tests/status.spec.ts > AC3 4 种状态的步骤条 > 当前段的视觉态与该状态一致，之前的段为已完成，之后的段为未到达 1ms
  ✓ tests/status.spec.ts > AC3 4 种状态的步骤条 > 已完成段与未到达段的视觉态不同（不能同色） 0ms
@@ -14,23 +14,28 @@
  ✓ tests/status.spec.ts > AC5 工作时间与非工作时间提示文案 > 服务时段取自可配置项，改配置文案跟着变 0ms
  ✓ tests/status.spec.ts > 联系方式扫描器本身可用（用于 AC4 的命中数为 0 断言） > 能识别手机号、座机、邮箱、微信号与 QQ 号 0ms
  ✓ tests/status.spec.ts > 联系方式扫描器本身可用（用于 AC4 的命中数为 0 断言） > 普通中文描述不会被误判 0ms
- ✓ tests/repository.spec.ts > 列表与详情的数据契约 > 分类固定 6 项且 key 与文案一一对应 2ms
+ ✓ tests/repository.spec.ts > 列表与详情的数据契约 > 分类固定 6 项且 key 与文案一一对应 3ms
  ✓ tests/repository.spec.ts > 列表与详情的数据契约 > 「我的咨询」未关闭数量按 status!==closed 统计 0ms
  ✓ tests/repository.spec.ts > 列表与详情的数据契约 > 列表按状态分组且组内顺序与状态顺序一致 0ms
- ✓ tests/repository.spec.ts > 列表与详情的数据契约 > 气泡数据左右分布正确：会员消息在右、礼宾消息在左 1ms
+ ✓ tests/repository.spec.ts > 列表与详情的数据契约 > 气泡数据左右分布正确：会员消息在右、管家消息在左 0ms
  ✓ tests/repository.spec.ts > 列表与详情的数据契约 > 每条消息都能格式化成 MM-DD HH:mm 并带上时间 1ms
  ✓ tests/repository.spec.ts > 列表与详情的数据契约 > 提交服务返回 queued 工单并带上来源与附件凭证 1ms
  ✓ tests/repository.spec.ts > 列表与详情的数据契约 > 已关闭工单不允许追加消息，未关闭工单可以 0ms
  ✓ tests/repository.spec.ts > 列表与详情的数据契约 > 上传凭证返回非空字符串，可逐张累积 0ms
  ✓ tests/repository.spec.ts > 列表与详情的数据契约 > 订阅消息授权组件当前为空实现，调用不抛错（调用点已预留） 1ms
+ ✓ tests/repository.spec.ts > 列表与详情的数据契约 > 用户可见文案里不出现「礼宾」字样（返修自查） 1ms
  ✓ tests/repository.spec.ts > 列表与详情的数据契约 > 未选分类 + 已填 10 字时仍被分类拦住（页面提示与校验同源） 0ms
- ✓ tests/source.spec.ts > AC2 从 FAQ 详情进入时来源被带入并显示 > source=faq 时标签为「来自：常见问题」 1ms
- ✓ tests/source.spec.ts > AC2 从 FAQ 详情进入时来源被带入并显示 > source=butler 时标签为「来自：礼宾对话」 0ms
+ ✓ tests/source.spec.ts > AC2 从 FAQ 详情进入时来源被带入并显示 > source=faq 时标签为「来自：常见问题」 2ms
+ ✓ tests/source.spec.ts > AC2 从 FAQ 详情进入时来源被带入并显示 > source=butler 时标签为「来自：管家对话」 0ms
+ ✓ tests/source.spec.ts > AC2 从 FAQ 详情进入时来源被带入并显示 > FAQ 入口带上条目标题时显示「来自：FAQ 某条」 0ms
+ ✓ tests/source.spec.ts > AC2 从 FAQ 详情进入时来源被带入并显示 > FAQ 入口只带 faq_id 时按字典查出条目并显示 0ms
+ ✓ tests/source.spec.ts > AC2 从 FAQ 详情进入时来源被带入并显示 > 取不到条目时退回类别文案「来自：常见问题」且不编造条目 0ms
+ ✓ tests/source.spec.ts > AC2 从 FAQ 详情进入时来源被带入并显示 > 条目名清洗：压缩空白并截断到 40 字 1ms
  ✓ tests/source.spec.ts > AC2 从 FAQ 详情进入时来源被带入并显示 > 不带 source 进入时不渲染来源标签（误显示数为 0） 0ms
  ✓ tests/source.spec.ts > AC2 从 FAQ 详情进入时来源被带入并显示 > 非法取值一律当作没有来源，不产生错配文案 0ms
  ✓ tests/source.spec.ts > AC2 从 FAQ 详情进入时来源被带入并显示 > 两个来源的文案互不相同，不存在串台 1ms
  ✓ tests/source.spec.ts > AC2 从 FAQ 详情进入时来源被带入并显示 > 从 from 参数进入同样能带入来源（兼容旧入口链接） 0ms
- ✓ tests/validation.spec.ts > AC1 描述少于 10 字时无法提交并给出提示 > 9 个字：不足下限，按钮禁用，给出下限提示 1ms
+ ✓ tests/validation.spec.ts > AC1 描述少于 10 字时无法提交并给出提示 > 9 个字：不足下限，按钮禁用，给出下限提示 2ms
  ✓ tests/validation.spec.ts > AC1 描述少于 10 字时无法提交并给出提示 > 10 个字：达到下限，按钮可提交 0ms
  ✓ tests/validation.spec.ts > AC1 描述少于 10 字时无法提交并给出提示 > 500 字可提交、501 字被拦下并提示上限 0ms
  ✓ tests/validation.spec.ts > AC1 描述少于 10 字时无法提交并给出提示 > 未选分类时即使描述够长也不可提交 0ms
@@ -40,7 +45,7 @@
  ✓ tests/validation.spec.ts > AC1 描述少于 10 字时无法提交并给出提示 > 空描述不给下限提示（避免刚进页面就报错），但提交仍被拦下 0ms
 
  Test Files  4 passed (4)
-      Tests  37 passed (37)
-   Start at  13:23:27
-   Duration  513ms (import 39%, transform 23%, tests 23%, worker 15%, environment 1%)
+      Tests  42 passed (42)
+   Start at  12:14:01
+   Duration  570ms (import 40%, tests 23%, transform 22%, worker 15%, environment 1%)
 

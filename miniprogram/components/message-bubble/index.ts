@@ -1,5 +1,5 @@
 /**
- * 消息气泡：会员一侧靠右、礼宾团队一侧靠左，每条都带时间。
+ * 消息气泡：会员一侧靠右、管家团队一侧靠左，每条都带时间。
  * 组件只接收 side / text / time 三个属性，不做业务判断，便于在详情页复用。
  */
 import { formatMessageTime } from '../../utils/format';
@@ -19,10 +19,10 @@ Component({
       type: String,
       value: '',
     },
-    /** 对方显示名，默认「礼宾团队」；会员一侧不显示 */
+    /** 对方显示名，默认「管家团队」；会员一侧不显示 */
     name: {
       type: String,
-      value: '礼宾团队',
+      value: '管家团队',
     },
   },
   data: {
@@ -39,4 +39,3 @@ Component({
     },
   },
 });
-

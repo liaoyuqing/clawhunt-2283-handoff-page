@@ -1,0 +1,15 @@
+[wechatide] devtools verification log  (skill 0.3.11, loginUser 莽夫, versionRelation=equal, loginExpired=false)
+
+1) project_import        : success=true alreadyImported=false projectName=clawhunt-2283-handoff-page
+2) open_project_window   : success=true type=newopen
+3) simulator_refresh     : success=true
+4) get_simulator_console --command error : result=""  (0 error entries across the whole evidence session)
+5) get_simulator_network --command api/mini : result=""  (0 requests: all interfaces are in-process mocks)
+
+Pages opened for the 13 screenshots (one query parameter per call, cmd.exe drops the second):
+  pages/support/handoff?source=faq              -> 来自：常见问题 (fallback copy)
+  pages/support/handoff?faq_id=FAQ-1012         -> 来自：FAQ 工位空调出风小如何报修
+  pages/support/handoff?source=butler           -> 来自：管家对话
+  pages/support/handoff?hours=on / hours=off    -> AC5 two tips
+  pages/support/handoff?demo=short9 / demo=ok10 -> AC1 disabled / enabled
+  pages/support/handoff-detail?id=H-1001..H-1004 -> AC3 four states, AC4 open/closed input

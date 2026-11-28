@@ -30,7 +30,7 @@
       side="{{item.side}}"
       text="{{item.text}}"
       time="{{item.time}}"
-      name="礼宾团队"
+      name="管家团队"
     />
   </view>
 

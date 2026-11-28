@@ -8,7 +8,7 @@
 | --- | --- | --- |
 | 转人工提交页 | `miniprogram/pages/support/handoff` | 问题分类 6 选 1、问题描述 10–500 字校验、截图最多 3 张（`wx.chooseMedia` + 上传凭证 mock）、来源标签、我的咨询列表、提交 |
 | 处理进度详情页 | `miniprogram/pages/support/handoff-detail?id=` | 四段步骤条（排队中 / 处理中 / 已回复 / 已关闭）、对话记录气泡、回复输入框、关闭态结束提示 |
-| 消息气泡组件 | `miniprogram/components/message-bubble` | 会员消息靠右、礼宾团队消息靠左，每条带时间 |
+| 消息气泡组件 | `miniprogram/components/message-bubble` | 会员消息靠右、管家团队消息靠左，每条带时间 |
 
 ## 目录结构
 
@@ -81,18 +81,18 @@ npm run typecheck
 npm test
 ```
 
-等价于 `npx vitest run`。四个测试文件、37 个用例，覆盖 5 条验收点里所有可纯函数断言的部分。
+等价于 `npx vitest run`。四个测试文件、42 个用例，覆盖 5 条验收点里所有可纯函数断言的部分（含一条「页面文案不含礼宾」的返修自查用例）。
 
 预期输出：
 
 ```text
  ✓ tests/status.spec.ts (13 tests)
- ✓ tests/repository.spec.ts (10 tests)
+ ✓ tests/repository.spec.ts (11 tests)
  ✓ tests/validation.spec.ts (8 tests)
- ✓ tests/source.spec.ts (6 tests)
+ ✓ tests/source.spec.ts (10 tests)
 
  Test Files  4 passed (4)
-      Tests  37 passed (37)
+      Tests  42 passed (42)
 ```
 
 逐用例清单见 `docs/checks/unit-tests.log`（verbose 输出，每个用例一行）。
@@ -111,7 +111,9 @@ npm run verify
 
 | 参数 | 取值 | 作用 |
 | --- | --- | --- |
-| `source` / `from` | `faq` / `butler` | 带入来源并显示「来自：常见问题」/「来自：礼宾对话」；不传或非法值不渲染来源 |
+| `source` / `from` | `faq` / `butler` | 带入来源并显示「来自：管家对话」；`faq` 未带条目时显示「来自：常见问题」；不传或非法值不渲染来源 |
+| `faq_title` | FAQ 条目标题 | 与 `source=faq` 等价（带了即视为 FAQ 入口），显示「来自：FAQ <条目>」 |
+| `faq_id` | FAQ 条目 id | 按 `mock/support.ts` 的条目字典查出标题后显示「来自：FAQ <条目>」，查不到退回「来自：常见问题」 |
 | `hours` | `on` / `off` | 覆盖工作时间判定，用于展示两套提示文案；真实环境该值由后端 `in_work_hours` 提供 |
 | `demo` | `short9` / `ok10` | 预填 9 字 / 10 字描述，用于展示提交按钮的禁用与可用对比 |
 | `category` | 6 个分类 key 之一 | 预选分类 |
@@ -121,14 +123,14 @@ npm run verify
 ## 与真实接口的对接点
 
 - 所有数据出入口收敛在 `miniprogram/services/support.ts` 的 `supportService`，替换该文件内部实现即可接入真实后端，页面无需改动。
-- 提交入参已按约定携带 `category`、`description`、`source`、`attachmentTokens`，来源不会被丢弃。
+- 提交入参已按约定携带 `category`、`description`、`source`、`sourceDetail`、`attachmentTokens`，来源与 FAQ 条目都不会被丢弃。
 - 工作时间口径由 `utils/status.ts` 的 `DEFAULT_WORK_HOURS`（09:00–18:00，法定节假日顺延）描述，`workHoursTip(inWorkHours, config)` 的第二个参数可整体替换为后端下发的时间口径；页面只消费 `inWorkHours` 布尔值与文案，不硬编码时段。
 - 订阅消息授权组件由另一工单实现，本仓库在 `services/support.ts` 预留了 `subscribeNotifier.requestReplyNotice(ticketId)` 调用点，当前为空实现，替换为 `wx.requestSubscribeMessage` 即可。
 - 页面不展示任何员工联系方式；`utils/status.ts` 的 `scanContacts` 用于在测试中证明页面可见文案的联系方式命中数为 0。
 
 ## 证据
 
-`docs/checks/` 是逐条命令的原始日志：`typecheck.log`（空文件即通过）、`unit-tests.log`（37 个用例逐行）、`verify.log`（一条命令跑完三步）。
+`docs/checks/` 是逐条命令的原始日志：`typecheck.log`（空文件即通过）、`unit-tests.log`（42 个用例逐行）、`verify.log`（一条命令跑完三步）、`devtools.log`（开发者工具 import/编译/页面入口与 console、network 抓取记录）。
 
 `docs/screenshots/` 是微信开发者工具模拟器实拍截图，文件名前缀即验收点编号：
 
@@ -136,8 +138,9 @@ npm run verify
 | --- | --- | --- |
 | `ac1-9chars-disabled.jpg` | AC1 | 描述 9 字，红字提示「请至少填写 10 个字，便于我们准确理解您的问题」，计数 9/500，提交按钮置灰且下方同文案 |
 | `ac1-10chars-enabled.jpg` | AC1 | 描述 10 字，提示消失，计数 10/500，提交按钮可点 |
-| `ac2-source-faq.jpg` | AC2 | 从 FAQ 进入，卡片内显示「来自：常见问题」 |
-| `ac2-source-butler.jpg` | AC2 | 从礼宾对话进入，显示「来自：礼宾对话」 |
+| `ac2-source-faq.jpg` | AC2 | 从 FAQ 某条进入（`faq_id=FAQ-1012`），卡片内显示「来自：FAQ 工位空调出风小如何报修」 |
+| `ac2-source-faq-basic.jpg` | AC2 | FAQ 入口未带条目（`source=faq`），退回类别文案「来自：常见问题」 |
+| `ac2-source-butler.jpg` | AC2 | 从管家对话进入，显示「来自：管家对话」 |
 | `ac3-step-queued.jpg` | AC3 | 排队中：仅第 1 段高亮，后 3 段未到达 |
 | `ac3-step-in-progress.jpg` | AC3 | 处理中：第 1 段已完成打勾，第 2 段高亮，后 2 段未到达 |
 | `ac3-step-replied.jpg` | AC3 | 已回复：前 3 段完成，第 3 段高亮，第 4 段未到达 |
@@ -147,4 +150,4 @@ npm run verify
 | `ac5-work-hours-tip.jpg` | AC5 | 工作时间内：蓝底「服务时间 9:00–18:00（法定节假日顺延），提交后将按顺序处理」 |
 | `ac5-off-hours-tip.jpg` | AC5 | 非工作时间：橙底「当前为非服务时间，提交后将于次日 9:00 起依次处理」 |
 
-截图由微信开发者工具模拟器（iPhone 尺寸 428×926）实拍，未经任何后期处理。
+共 13 张，截图由微信开发者工具模拟器（iPhone 尺寸 428×926）实拍，未经任何后期处理；同一批画面的 console error 与 network 请求抓取记录见 `docs/checks/devtools.log`。

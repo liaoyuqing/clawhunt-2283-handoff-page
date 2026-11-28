@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { supportService, subscribeNotifier } from '../miniprogram/services/support';
 import { mockListTickets, mockGetTicket } from '../miniprogram/mock/support';
@@ -38,7 +39,7 @@ describe('列表与详情的数据契约', () => {
     expect(groups.reduce((sum, group) => sum + group.items.length, 0)).toBe(mockListTickets().length);
   });
 
-  it('气泡数据左右分布正确：会员消息在右、礼宾消息在左', () => {
+  it('气泡数据左右分布正确：会员消息在右、管家消息在左', () => {
     const ticket = mockGetTicket('H-1003');
     expect(ticket).not.toBeNull();
     const sides = ticket?.messages.map((message) => message.side);
@@ -64,10 +65,12 @@ describe('列表与详情的数据契约', () => {
       category: 'resource_match',
       description: '想对接做工业视觉检测的会员企业，我们是做产线集成的，希望有机会交流。',
       source: 'faq',
+      sourceDetail: '工位空调出风小如何报修',
       attachmentTokens: ['mock-token-a'],
     });
     expect(ticket.status).toBe('queued');
     expect(ticket.source).toBe('faq');
+    expect(ticket.sourceDetail).toBe('工位空调出风小如何报修');
     expect(ticket.id).toMatch(/^H-\d+$/);
     expect(buildSteps(ticket.status).filter((step) => step.visual === 'current')).toHaveLength(1);
   });
@@ -91,10 +94,22 @@ describe('列表与详情的数据契约', () => {
     expect(() => subscribeNotifier.requestReplyNotice('H-1001')).not.toThrow();
   });
 
+  it('用户可见文案里不出现「礼宾」字样（返修自查）', () => {
+    const files = [
+      'miniprogram/pages/support/handoff.json',
+      'miniprogram/pages/support/handoff.wxml',
+      'miniprogram/pages/support/handoff-detail.wxml',
+      'miniprogram/components/message-bubble/index.ts',
+      'miniprogram/mock/support.ts',
+      'miniprogram/utils/source.ts',
+    ];
+    const hits = files.filter((file) => readFileSync(file, 'utf8').includes('礼宾'));
+    expect(hits).toEqual([]);
+  });
+
   it('未选分类 + 已填 10 字时仍被分类拦住（页面提示与校验同源）', () => {
     const gate = submitGate({ category: null, description: '会员权益咨询十个字', attachmentCount: 0 });
     expect(gate.enabled).toBe(false);
     expect(gate.reason).toBe('请选择问题分类');
   });
 });
-

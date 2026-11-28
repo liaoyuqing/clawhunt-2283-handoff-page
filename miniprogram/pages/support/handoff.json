@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "联系礼宾团队",
+  "navigationBarTitleText": "联系管家团队",
   "usingComponents": {
     "t-button": "tdesign-miniprogram/button/button",
     "t-textarea": "tdesign-miniprogram/textarea/textarea",

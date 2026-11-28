@@ -30,6 +30,8 @@ export interface HandoffTicket {
   category: HandoffCategory;
   description: string;
   source: HandoffSource | null;
+  /** 来源条目：FAQ 入口带出的具体问答标题；没有则为空串 */
+  sourceDetail: string;
   status: HandoffStatus;
   createdAt: string;
   messages: HandoffMessage[];
@@ -47,12 +49,15 @@ export interface HandoffDraft {
   description: string;
   attachments: HandoffAttachment[];
   source: HandoffSource | null;
+  sourceDetail: string;
 }
 
 export interface SubmitPayload {
   category: HandoffCategory;
   description: string;
   source: HandoffSource | null;
+  /** FAQ 入口带出的具体条目，用于详情页显示「来自：FAQ 某条」 */
+  sourceDetail: string;
   attachmentTokens: string[];
 }
 
@@ -60,4 +65,3 @@ export function categoryLabel(key: HandoffCategory): string {
   const hit = HANDOFF_CATEGORIES.find((item) => item.key === key);
   return hit ? hit.label : '';
 }
-

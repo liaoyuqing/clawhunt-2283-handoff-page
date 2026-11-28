@@ -13,7 +13,20 @@ import type {
 /** 服务时间口径的可配置项：默认 9:00–18:00、法定节假日不计入工作时间 */
 export const MOCK_IN_WORK_HOURS = true;
 
-const BUTLER_NAME = '礼宾团队';
+const BUTLER_NAME = '管家团队';
+
+/** FAQ 条目字典：faq_id → 条目标题。真实环境由后端下发，这里是与 mock 工单配套的虚构条目 */
+const FAQ_ENTRIES: Record<string, string> = {
+  'FAQ-1012': '工位空调出风小如何报修',
+  'FAQ-1043': '会议室的免费时长怎么计算',
+  'FAQ-1105': '闭门会报名后多久收到确认',
+  'FAQ-1188': '如何对接其他会员企业',
+};
+
+/** 查 FAQ 条目标题；查不到返回 null，页面会退回类别文案 */
+export function mockFaqTitle(faqId: string): string | null {
+  return FAQ_ENTRIES[faqId] ?? null;
+}
 
 function message(id: string, side: 'member' | 'butler', text: string, time: string): HandoffMessage {
   return { id, side, text, time };
@@ -25,6 +38,7 @@ const TICKETS: HandoffTicket[] = [
     category: 'space_facility',
     description: '三楼靠窗的独立工位最近空调出风很小，下午有点闷，想请物业看一下。',
     source: 'faq',
+    sourceDetail: '工位空调出风小如何报修',
     status: 'queued',
     createdAt: '2026-11-24T09:12:00+08:00',
     messages: [
@@ -36,6 +50,7 @@ const TICKETS: HandoffTicket[] = [
     category: 'member_benefit',
     description: '企业会员权益里的会议室免费时长，本月是否还能再用两次？',
     source: 'butler',
+    sourceDetail: '',
     status: 'in_progress',
     createdAt: '2026-11-23T14:05:00+08:00',
     messages: [
@@ -48,6 +63,7 @@ const TICKETS: HandoffTicket[] = [
     category: 'event_signup',
     description: '上周报名的产业链闭门会没有收到确认，想确认一下名额是否生效。',
     source: null,
+    sourceDetail: '',
     status: 'replied',
     createdAt: '2026-11-21T10:30:00+08:00',
     messages: [
@@ -62,6 +78,7 @@ const TICKETS: HandoffTicket[] = [
     category: 'resource_match',
     description: '想对接做工业视觉检测的会员企业，我们是做产线集成的，希望有机会交流。',
     source: 'faq',
+    sourceDetail: '如何对接其他会员企业',
     status: 'closed',
     createdAt: '2026-11-18T16:40:00+08:00',
     messages: [
@@ -107,6 +124,7 @@ export function mockSubmit(payload: SubmitPayload): HandoffTicket {
     category: payload.category,
     description: payload.description,
     source: payload.source,
+    sourceDetail: payload.sourceDetail,
     status: 'queued',
     createdAt: now,
     messages: [message('M-1', 'member', payload.description, now)],
@@ -131,4 +149,3 @@ export function mockUploadToken(index: number): string {
 }
 
 export { BUTLER_NAME };
-

@@ -3,10 +3,10 @@ import { HANDOFF_CATEGORIES } from '../../utils/handoff-types';
 import type { HandoffAttachment, HandoffSource, HandoffStatus, HandoffTicket } from '../../utils/handoff-types';
 import { countUnclosed, groupByStatus } from '../../utils/format';
 import { ATTACHMENT_MAX, ATTACHMENT_MAX_TIP, checkDescription, submitGate } from '../../utils/validation';
-import { resolveSourceFromQuery, sourceLabel } from '../../utils/source';
+import { resolveFaqEntry, sourceFromOptions, sourceLabel } from '../../utils/source';
 import { STATUS_LABEL, STATUS_SEQUENCE, workHoursTip } from '../../utils/status';
 import { resolveCategoryParam, resolveDemoParam, resolveWorkHoursParam } from '../../utils/query';
-import { MOCK_IN_WORK_HOURS } from '../../mock/support';
+import { MOCK_IN_WORK_HOURS, mockFaqTitle } from '../../mock/support';
 
 interface TicketGroup {
   status: HandoffStatus;
@@ -18,6 +18,8 @@ interface PageData {
   inWorkHours: boolean;
   workTip: string;
   source: HandoffSource | null;
+  /** FAQ 入口带出的具体条目，提交时随单上送；没有则为空串 */
+  sourceDetail: string;
   sourceLabel: string;
   showSource: boolean;
   categories: Array<{ key: string; label: string }>;
@@ -43,6 +45,7 @@ Page<PageData, WechatMiniprogram.Page.CustomOption>({
     inWorkHours: MOCK_IN_WORK_HOURS,
     workTip: workHoursTip(MOCK_IN_WORK_HOURS).text,
     source: null,
+    sourceDetail: '',
     sourceLabel: '',
     showSource: false,
     categories: HANDOFF_CATEGORIES.map((item) => ({ key: item.key as string, label: item.label })),
@@ -64,11 +67,14 @@ Page<PageData, WechatMiniprogram.Page.CustomOption>({
   },
 
   onLoad(options: Record<string, unknown>) {
-    const source = resolveSourceFromQuery(options);
+    // 来源与条目：带 faq_title / faq_id 的入口按 faq 处理，条目取不到时退回类别文案
+    const source = sourceFromOptions(options);
+    const sourceDetail = source === 'faq' ? resolveFaqEntry(options, mockFaqTitle) : '';
     const inWorkHours = resolveWorkHoursParam(options, MOCK_IN_WORK_HOURS);
     this.setData({
       source,
-      sourceLabel: sourceLabel(source),
+      sourceDetail,
+      sourceLabel: sourceLabel(source, sourceDetail),
       showSource: source !== null,
       inWorkHours,
       workTip: workHoursTip(inWorkHours).text,
@@ -205,6 +211,7 @@ Page<PageData, WechatMiniprogram.Page.CustomOption>({
         category: this.data.category as never,
         description: this.data.description,
         source: this.data.source,
+        sourceDetail: this.data.sourceDetail,
         attachmentTokens: this.data.attachments.map((item) => item.token),
       })
       .then((ticket) => {

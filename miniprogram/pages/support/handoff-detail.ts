@@ -72,7 +72,7 @@ Page<PageData, WechatMiniprogram.Page.CustomOption>({
       loaded: true,
       status: ticket.status,
       categoryText: categoryLabel(ticket.category),
-      sourceText: sourceText(ticket.source),
+      sourceText: sourceText(ticket.source, ticket.sourceDetail),
       showSource: ticket.source !== null,
       statusLabel: STATUS_LABEL[ticket.status],
       stepIndex: statusIndex(ticket.status) + 1,
@@ -120,4 +120,3 @@ Page<PageData, WechatMiniprogram.Page.CustomOption>({
     });
   },
 });
-
