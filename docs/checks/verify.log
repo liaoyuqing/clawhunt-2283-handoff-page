@@ -19,13 +19,13 @@
 
  RUN  v5.1.2 E:/AI接单/Clawhunt/delivery/work/2283/repo
 
+ ✓ tests/status.spec.ts (13 tests) 11ms
+ ✓ tests/repository.spec.ts (15 tests) 14ms
+ ✓ tests/validation.spec.ts (12 tests) 8ms
  ✓ tests/source.spec.ts (10 tests) 7ms
- ✓ tests/status.spec.ts (13 tests) 10ms
- ✓ tests/repository.spec.ts (11 tests) 11ms
- ✓ tests/validation.spec.ts (8 tests) 6ms
 
  Test Files  4 passed (4)
-      Tests  42 passed (42)
-   Start at  12:27:14
-   Duration  701ms (worker 34%, import 27%, transform 26%, tests 13%)
+      Tests  50 passed (50)
+   Start at  12:42:20
+   Duration  624ms (import 40%, tests 23%, transform 23%, worker 13%, environment 1%)
 

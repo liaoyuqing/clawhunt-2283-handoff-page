@@ -81,18 +81,18 @@ npm run typecheck
 npm test
 ```
 
-等价于 `npx vitest run`。四个测试文件、42 个用例，覆盖 5 条验收点里所有可纯函数断言的部分（含一条「页面文案不含礼宾」的返修自查用例）。
+等价于 `npx vitest run`。四个测试文件、50 个用例，覆盖 5 条验收点里所有可纯函数断言的部分（含「页面文案不含礼宾」「FAQ 条目字典在仓库内」「截图索引与文件一一对应」三条返修自查用例）。
 
 预期输出：
 
 ```text
  ✓ tests/status.spec.ts (13 tests)
- ✓ tests/repository.spec.ts (11 tests)
- ✓ tests/validation.spec.ts (8 tests)
+ ✓ tests/repository.spec.ts (15 tests)
+ ✓ tests/validation.spec.ts (12 tests)
  ✓ tests/source.spec.ts (10 tests)
 
  Test Files  4 passed (4)
-      Tests  42 passed (42)
+      Tests  50 passed (50)
 ```
 
 逐用例清单见 `docs/checks/unit-tests.log`（verbose 输出，每个用例一行）。
@@ -130,7 +130,7 @@ npm run verify
 
 ## 证据
 
-`docs/checks/` 是逐条命令的原始日志：`typecheck.log`（空文件即通过）、`unit-tests.log`（42 个用例逐行）、`verify.log`（一条命令跑完三步）、`devtools.log`（开发者工具 import/编译/页面入口与 console、network 抓取记录）。
+`docs/checks/` 是逐条命令的原始日志：`typecheck.log`（空文件即通过）、`unit-tests.log`（50 个用例逐行）、`verify.log`（一条命令跑完三步）、`devtools.log`（开发者工具 import/编译/页面入口与 console、network 抓取记录）。
 
 `docs/screenshots/` 是微信开发者工具模拟器实拍截图，文件名前缀即验收点编号：
 
@@ -150,4 +150,4 @@ npm run verify
 | `ac5-work-hours-tip.jpg` | AC5 | 工作时间内：蓝底「服务时间 9:00–18:00（法定节假日顺延），提交后将按顺序处理」 |
 | `ac5-off-hours-tip.jpg` | AC5 | 非工作时间：橙底「当前为非服务时间，提交后将于次日 9:00 起依次处理」 |
 
-共 13 张，截图由微信开发者工具模拟器（iPhone 尺寸 428×926）实拍，未经任何后期处理；同一批画面的 console error 与 network 请求抓取记录见 `docs/checks/devtools.log`。
+共 13 张，截图由微信开发者工具模拟器（iPhone 尺寸 428×926）实拍，未经任何后期处理；每张图的入口参数与画面文案原文逐条抄录在 `docs/screenshots/INDEX.md`（由单元测试校验与文件一一对应），同一批画面的 console error 与 network 请求抓取记录见 `docs/checks/devtools.log`。

@@ -1,7 +1,7 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { supportService, subscribeNotifier } from '../miniprogram/services/support';
-import { mockListTickets, mockGetTicket } from '../miniprogram/mock/support';
+import { mockListTickets, mockGetTicket, mockFaqTitle } from '../miniprogram/mock/support';
 import { countUnclosed, formatMessageTime, groupByStatus } from '../miniprogram/utils/format';
 import { STATUS_SEQUENCE } from '../miniprogram/utils/status';
 import { buildSteps } from '../miniprogram/utils/status';
@@ -113,3 +113,56 @@ describe('列表与详情的数据契约', () => {
     expect(gate.reason).toBe('请选择问题分类');
   });
 });
+  it('FAQ 条目字典在仓库内，faq_id 能解析出可核对的标题', () => {
+    expect(mockFaqTitle('FAQ-1012')).toBe('工位空调出风小如何报修');
+    expect(mockFaqTitle('FAQ-1188')).toBe('如何对接其他会员企业');
+    expect(mockFaqTitle('FAQ-0000')).toBeNull();
+  });
+
+  it('FAQ 条目字典随仓库提交，不依赖任何远程数据', () => {
+    const text = readFileSync('miniprogram/mock/support.ts', 'utf8');
+    expect(text.includes("'FAQ-1012': '工位空调出风小如何报修'")).toBe(true);
+    expect(text.includes("'FAQ-1188': '如何对接其他会员企业'")).toBe(true);
+  });
+  it('截图索引与文件一一对应：13 张全部存在，AC5 两图是独立文件且文案不同', () => {
+    const index = readFileSync('docs/screenshots/INDEX.md', 'utf8');
+    const rows = index.split('\n').filter((line) => line.startsWith('| `ac') || line.startsWith('| `ac'));
+    const files = Array.from(index.matchAll(/`([a-z0-9-]+\.jpg)`/g)).map((m) => m[1]);
+    const unique = Array.from(new Set(files));
+    expect(unique.length).toBe(13);
+    for (const name of unique) {
+      expect(existsSync('docs/screenshots/' + name)).toBe(true);
+    }
+    expect(rows.length).toBeGreaterThanOrEqual(13);
+    // AC5 必须是两张独立截图，且文案互不相同
+    const workRow = index.split('\n').find((line) => line.includes('ac5-work-hours-tip.jpg')) ?? '';
+    const offRow = index.split('\n').find((line) => line.includes('ac5-off-hours-tip.jpg')) ?? '';
+    expect(workRow).not.toBe('');
+    expect(offRow).not.toBe('');
+    expect(workRow).toContain('服务时间 9:00–18:00');
+    expect(offRow).toContain('当前为非服务时间');
+    expect(workRow).not.toBe(offRow);
+  });
+
+  it('截图索引里每张图的入口参数与验收点编号自洽', () => {
+    const index = readFileSync('docs/screenshots/INDEX.md', 'utf8');
+    const pairs = [
+      ['ac1-9chars-disabled.jpg', 'demo=short9'],
+      ['ac1-10chars-enabled.jpg', 'demo=ok10'],
+      ['ac2-source-faq.jpg', 'faq_id=FAQ-1012'],
+      ['ac2-source-faq-basic.jpg', 'source=faq'],
+      ['ac2-source-butler.jpg', 'source=butler'],
+      ['ac3-step-queued.jpg', 'id=H-1001'],
+      ['ac3-step-in-progress.jpg', 'id=H-1002'],
+      ['ac3-step-replied.jpg', 'id=H-1003'],
+      ['ac3-step-closed.jpg', 'id=H-1004'],
+      ['ac4-open-input-present.jpg', 'id=H-1003'],
+      ['ac4-closed-no-input.jpg', 'id=H-1004'],
+      ['ac5-work-hours-tip.jpg', 'hours=on'],
+      ['ac5-off-hours-tip.jpg', 'hours=off'],
+    ];
+    for (const [file, param] of pairs) {
+      const row = index.split('\n').find((line) => line.includes(file)) ?? '';
+      expect(row).toContain(param);
+    }
+  });

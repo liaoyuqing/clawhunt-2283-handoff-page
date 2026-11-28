@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
+import { resolveDemoParam, DEMO_PRESETS } from '../miniprogram/utils/query';
 import {
   ATTACHMENT_MAX,
   CATEGORY_REQUIRED_TIP,
@@ -94,3 +95,48 @@ describe('AC1 描述少于 10 字时无法提交并给出提示', () => {
   });
 });
 
+describe('AC1 截图入口 demo 不绕过 10–500 字校验（同一套函数）', () => {
+  it('demo=short9 的预填文本按码点正好 9 字，且被同一套校验判为不可提交', () => {
+    const preset = resolveDemoParam({ demo: 'short9' });
+    expect(preset).not.toBeNull();
+    expect(countChars(preset!.description)).toBe(9);
+    const check = checkDescription(preset!.description);
+    expect(check.enough).toBe(false);
+    expect(check.tip).toBe(DESCRIPTION_MIN_TIP);
+    const gate = submitGate({
+      category: preset!.category,
+      description: preset!.description,
+      attachmentCount: 0,
+    });
+    expect(gate.enabled).toBe(false);
+    expect(gate.reason).toBe(DESCRIPTION_MIN_TIP);
+  });
+
+  it('demo=ok10 的预填文本正好 10 字，同一套校验判为可提交', () => {
+    const preset = resolveDemoParam({ demo: 'ok10' });
+    expect(countChars(preset!.description)).toBe(10);
+    const gate = submitGate({
+      category: preset!.category,
+      description: preset!.description,
+      attachmentCount: 0,
+    });
+    expect(gate.enabled).toBe(true);
+    expect(gate.reason).toBeNull();
+  });
+
+  it('demo 只认两个固定取值，其它值一律忽略（不会造出任意预填状态）', () => {
+    expect(Object.keys(DEMO_PRESETS).sort()).toEqual(['ok10', 'short9']);
+    const ignored = [{ demo: 'short8' }, { demo: '' }, { demo: 9 }, { demo: null }, {}, null];
+    for (const options of ignored) {
+      expect(resolveDemoParam(options as never)).toBeNull();
+    }
+  });
+
+  it('预填文本增删一字即翻转判定，说明走的仍是 10 字下限', () => {
+    const nine = DEMO_PRESETS.short9.description;
+    const ten = DEMO_PRESETS.ok10.description;
+    expect(submitGate({ category: 'space_facility', description: nine, attachmentCount: 0 }).enabled).toBe(false);
+    expect(submitGate({ category: 'space_facility', description: ten, attachmentCount: 0 }).enabled).toBe(true);
+    expect(submitGate({ category: 'space_facility', description: ten.slice(0, 9), attachmentCount: 0 }).enabled).toBe(false);
+  });
+});
